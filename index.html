@@ -305,11 +305,10 @@ async function sendMessage() {
     }
     msgs.push({role:'user', content: text || 'Halo'});
 
-    var useOR = currentModel === '20';
-    var model = useOR ? 'openai/gpt-oss-120b:free' : 'llama-3.3-70b-versatile';
-    var res = await fetch(useOR ? OR_URL : GROQ_URL, {
+    var model = currentModel === '20' ? 'openai/gpt-oss-120b:free' : 'meta-llama/llama-3.3-70b-instruct:free';
+    var res = await fetch(OR_URL, {
       method: 'POST',
-      headers: {'Content-Type':'application/json','Authorization':'Bearer '+(useOR ? OR_KEY : GROQ_KEY)},
+      headers: {'Content-Type':'application/json','Authorization':'Bearer '+OR_KEY},
       body: JSON.stringify({model: model, max_tokens:2048, messages:msgs})
     });
 
