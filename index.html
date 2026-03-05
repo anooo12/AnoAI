@@ -131,6 +131,7 @@ var GROQ_KEY = "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";
 var GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 var OR_KEY = "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";
 var OR_URL = "https://openrouter.ai/api/v1/chat/completions";
+
 var SYSTEM_12 = "Kamu adalah Ano, asisten AI yang ramah dan helpful. Jawab dalam bahasa yang sama dengan pengguna.";
 var SYSTEM_20 = "Kamu adalah Ano 2.0, asisten AI canggih yang thoughtful dan mendalam. Jawab dengan terstruktur, gunakan contoh konkret, berpikir step-by-step. Jawab dalam bahasa yang sama dengan pengguna.";
 
@@ -161,7 +162,7 @@ function switchModel(m) {
   document.getElementById('btn-12').classList.toggle('active', m==='12');
   document.getElementById('btn-20').classList.toggle('active', m==='20');
   document.getElementById('model-name').textContent = m==='12' ? 'Astro 1.2' : 'Astro 2.0';
-  document.getElementById('model-sub').textContent = m==='12' ? 'powered by Ano · LLaMA' : 'powered by Ano · Claude';
+  document.getElementById('model-sub').textContent = m==='12' ? 'powered by Ano · LLaMA' : 'powered by Ano · GPT-OSS';
 }
 
 function newChat() {
@@ -305,10 +306,11 @@ async function sendMessage() {
     msgs.push({role:'user', content: text || 'Halo'});
 
     var useOR = currentModel === '20';
+    var model = useOR ? 'openai/gpt-oss-120b:free' : 'llama-3.3-70b-versatile';
     var res = await fetch(useOR ? OR_URL : GROQ_URL, {
       method: 'POST',
       headers: {'Content-Type':'application/json','Authorization':'Bearer '+(useOR ? OR_KEY : GROQ_KEY)},
-      body: JSON.stringify({model: useOR ? 'anthropic/claude-haiku-4-5' : 'llama-3.3-70b-versatile', max_tokens:2048, messages:msgs})
+      body: JSON.stringify({model: model, max_tokens:2048, messages:msgs})
     });
 
     if (!res.ok) throw new Error('HTTP '+res.status);
