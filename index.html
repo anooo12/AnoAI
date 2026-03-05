@@ -308,7 +308,12 @@ async function sendMessage() {
     var model = currentModel === '20' ? 'openai/gpt-oss-120b:free' : 'meta-llama/llama-3.3-70b-instruct:free';
     var res = await fetch(OR_URL, {
       method: 'POST',
-      headers: {'Content-Type':'application/json','Authorization':'Bearer '+OR_KEY},
+      headers: {
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+OR_KEY,
+        'HTTP-Referer':'https://anooo12.github.io',
+        'X-Title':'AnoAI'
+      },
       body: JSON.stringify({model: model, max_tokens:2048, messages:msgs})
     });
 
